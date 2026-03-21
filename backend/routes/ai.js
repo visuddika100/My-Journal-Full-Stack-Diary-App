@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/auth');
 
-router.use(protect);
+// node-fetch fallback for Node < 18
+let fetch = globalThis.fetch;
+if (!fetch) {
+  fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
+}
 
 const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
 

@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
     const { page = 1, limit = 20, search, mood, tag, favorite, startDate, endDate, sort = '-entryDate' } = req.query;
     const query = { user: req.user._id };
 
-    if (search) query.$text = { $search: search };
+    if (search && search.trim()) query.$text = { $search: search.trim() };
     if (mood) query['mood.label'] = mood;
     if (tag) query.tags = tag;
     if (favorite === 'true') query.isFavorite = true;

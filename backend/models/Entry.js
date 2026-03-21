@@ -62,14 +62,13 @@ const entrySchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Auto calculate word count before save
-entrySchema.pre('save', function (next) {
+// ✅ New
+entrySchema.pre('save', function () {
   if (this.isModified('content')) {
     this.wordCount = this.content.trim().split(/\s+/).filter(Boolean).length;
   }
-  next();
 });
-
-// Text search index
+// Text search index    
 entrySchema.index({ title: 'text', content: 'text', tags: 'text' });
 
 module.exports = mongoose.model('Entry', entrySchema);

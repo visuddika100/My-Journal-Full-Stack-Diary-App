@@ -40,7 +40,8 @@ router.post('/register', [
     const user = await User.create({ name, email, password });
     sendToken(user, 201, res);
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error('❌ Register error:', err.message, err.code, err);
+    res.status(500).json({ success: false, message: err.message, code: err.code });
   }
 });
 
