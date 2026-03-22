@@ -8,26 +8,26 @@ if (!fetch) {
   fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
 }
 
-const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
+//const ANTHROPIC_API = 'https://api.anthropic.com/v1/messages';
 
 async function callClaude(systemPrompt, userMessage) {
-  const response = await fetch(ANTHROPIC_API, {
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01'
+      'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1500,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userMessage }]
+      model: 'llama-3.1-8b-instant',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage }
+      ],
+      max_tokens: 1500
     })
-  });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error?.message || 'AI service error');
-  return data.content?.[0]?.text || '';
+  })
+  const data = await response.json()
+  return data.choices?.[0]?.message?.content || ''
 }
 
 function parseJSON(text) {
@@ -117,7 +117,7 @@ Entry snippet: "${(content || '').substring(0, 400)}"`
 });
 
 // POST /api/ai/translate
-router.post('/translate', async (req, res) => {
+/*router.post('/translate', async (req, res) => {
   const { content } = req.body;
   if (!content?.trim()) return res.status(400).json({ success: false, message: 'Content required' });
   try {
@@ -133,6 +133,6 @@ Entry: "${content.substring(0, 1000)}"`
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
-});
+});*/
 
 module.exports = router;
