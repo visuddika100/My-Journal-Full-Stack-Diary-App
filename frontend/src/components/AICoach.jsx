@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, CheckCircle, AlertCircle, BookOpen, Lightbulb, Languages, ChevronDown } from 'lucide-react'
+import { Sparkles, CheckCircle, AlertCircle, BookOpen, Lightbulb, ChevronDown } from 'lucide-react'
 import api from '../utils/api'
 import toast from 'react-hot-toast'
 
@@ -8,7 +8,7 @@ const TABS = [
   { id: 'grammar', label: 'Grammar', icon: CheckCircle },
   { id: 'vocabulary', label: 'Vocabulary', icon: BookOpen },
   { id: 'style', label: 'Style', icon: Sparkles },
-  { id: 'translate', label: 'Translate Help', icon: Languages },
+  //{ id: 'translate', label: 'Translate Help', icon: Languages },
   { id: 'prompts', label: 'Writing Prompts', icon: Lightbulb },
 ]
 
@@ -120,7 +120,7 @@ function StyleResult({ data }) {
   )
 }
 
-function TranslateResult({ data }) {
+/*function TranslateResult({ data }) {
   return (
     <div>
       {(data.non_english || []).length === 0 && (data.improvements || []).length === 0 ? (
@@ -156,7 +156,7 @@ function TranslateResult({ data }) {
       )}
     </div>
   )
-}
+}*/
 
 function PromptsResult({ data }) {
   return (
@@ -204,7 +204,7 @@ export default function AICoach({ content, title, entryId, onSaveAnalysis }) {
         grammar: '/ai/grammar',
         vocabulary: '/ai/vocabulary',
         style: '/ai/style',
-        translate: '/ai/translate',
+        //translate: '/ai/translate',
         prompts: '/ai/prompts',
       }
       const { data } = await api.post(endpoints[activeTab], { content, title })
@@ -225,7 +225,7 @@ export default function AICoach({ content, title, entryId, onSaveAnalysis }) {
     if (activeTab === 'grammar') return <GrammarResult data={r} />
     if (activeTab === 'vocabulary') return <VocabResult data={r} />
     if (activeTab === 'style') return <StyleResult data={r} />
-    if (activeTab === 'translate') return <TranslateResult data={r} />
+    //if (activeTab === 'translate') return <TranslateResult data={r} />
     if (activeTab === 'prompts') return <PromptsResult data={r} />
   }
 
